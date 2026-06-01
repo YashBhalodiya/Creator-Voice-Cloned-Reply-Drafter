@@ -14,6 +14,11 @@ class QuestionRepository {
     const stmt = db.prepare('SELECT * FROM questions WHERE id = ?');
     return stmt.get(id);
   }
+
+  findByCreatorId(creatorId) {
+    const stmt = db.prepare('SELECT * FROM questions WHERE creatorId = ? ORDER BY rowid DESC');
+    return stmt.all(creatorId);
+  }
 }
 
 export const questionRepository = new QuestionRepository();

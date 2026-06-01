@@ -17,6 +17,30 @@ class EvaluationController {
       next(error);
     }
   };
+
+  list = async (req, res, next) => {
+    try {
+      const evaluations = await evaluationService.listAllEvaluations();
+      res.status(200).json({
+        success: true,
+        data: evaluations
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  clear = async (req, res, next) => {
+    try {
+      await evaluationService.clearAllEvaluations();
+      res.status(200).json({
+        success: true,
+        message: 'All evaluations cleared successfully'
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export const evaluationController = new EvaluationController();

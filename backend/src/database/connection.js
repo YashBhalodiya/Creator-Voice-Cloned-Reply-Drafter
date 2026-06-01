@@ -76,6 +76,7 @@ const schema = `
     questionId TEXT NOT NULL,
     draft TEXT NOT NULL,
     rank INTEGER NOT NULL,
+    similarityScore REAL DEFAULT 0.0,
     FOREIGN KEY (creatorId) REFERENCES creators(id) ON DELETE CASCADE,
     FOREIGN KEY (questionId) REFERENCES questions(id) ON DELETE CASCADE
   );
@@ -85,6 +86,7 @@ const schema = `
     creatorId TEXT NOT NULL,
     score INTEGER NOT NULL,
     feedback TEXT,
+    createdAt TEXT DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (creatorId) REFERENCES creators(id) ON DELETE CASCADE
   );
 `;
@@ -98,6 +100,22 @@ try {
   if (!hasStyleFeatures) {
     db.exec("ALTER TABLE creators ADD COLUMN styleFeatures TEXT;");
     logger.info("Migrated SQLite database: added styleFeatures column to creators table.");
+  }
+
+  // Dynamic migration: Ensure evaluations table has the createdAt column
+  const evalTableInfo = db.prepare("PRAGMA table_info(evaluations)").all();
+  const hasCreatedAt = evalTableInfo.some(col => col.name === 'createdAt');
+  if (!hasCreatedAt) {
+    db.exec("ALTER TABLE evaluations ADD COLUMN createdAt TEXT;");
+    logger.info("Migrated SQLite database: added createdAt column to evaluations table.");
+  }
+
+  // Dynamic migration: Ensure drafts table has the similarityScore column
+  const draftsTableInfo = db.prepare("PRAGMA table_info(drafts)").all();
+  const hasSimilarityScore = draftsTableInfo.some(col => col.name === 'similarityScore');
+  if (!hasSimilarityScore) {
+    db.exec("ALTER TABLE drafts ADD COLUMN similarityScore REAL DEFAULT 0.0;");
+    logger.info("Migrated SQLite database: added similarityScore column to drafts table.");
   }
 
   logger.info('Database schema initialized successfully.');

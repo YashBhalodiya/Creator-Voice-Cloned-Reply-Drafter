@@ -17,6 +17,19 @@ class QuestionController {
       next(error);
     }
   };
+
+  listByCreator = async (req, res, next) => {
+    try {
+      const { creatorId } = req.params;
+      const questions = await questionService.getQuestionsByCreator(creatorId);
+      res.status(200).json({
+        success: true,
+        data: questions
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export const questionController = new QuestionController();

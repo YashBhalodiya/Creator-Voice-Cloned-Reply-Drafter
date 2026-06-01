@@ -66,6 +66,26 @@ class ReplyRepository {
     const serializedQuery = JSON.stringify(queryEmbedding);
     return stmt.all(serializedQuery, creatorId, limit);
   }
+
+  /**
+   * Fetches raw embeddings for the most recent replies of a creator.
+   * Used to compute real in-process cosine similarity against generated drafts.
+   * @param {string} creatorId The ID of the creator.
+   * @param {number} limit Maximum replies to fetch.
+   */
+  findEmbeddingsByCreatorId(creatorId, limit = 10) {
+    const stmt = db.prepare(`
+      SELECT embedding
+      FROM replies
+      WHERE creatorId = ?
+      ORDER BY createdAt DESC
+      LIMIT ?
+    `);
+    const rows = stmt.all(creatorId, limit);
+    return rows.map(r => {
+      try { return JSON.parse(r.embedding); } catch { return null; }
+    }).filter(e => Array.isArray(e) && e.length > 0);
+  }
 }
 
 export const replyRepository = new ReplyRepository();

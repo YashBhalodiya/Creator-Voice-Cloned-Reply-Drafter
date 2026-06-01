@@ -7,13 +7,13 @@ class DraftRepository {
    */
   createBulk(drafts) {
     const stmt = db.prepare(`
-      INSERT INTO drafts (id, creatorId, questionId, draft, rank)
-      VALUES (?, ?, ?, ?, ?)
+      INSERT INTO drafts (id, creatorId, questionId, draft, rank, similarityScore)
+      VALUES (?, ?, ?, ?, ?, ?)
     `);
 
     const insertTransaction = db.transaction((items) => {
       for (const item of items) {
-        stmt.run(item.id, item.creatorId, item.questionId, item.draft, item.rank);
+        stmt.run(item.id, item.creatorId, item.questionId, item.draft, item.rank, item.similarityScore ?? 0.0);
       }
     });
 
