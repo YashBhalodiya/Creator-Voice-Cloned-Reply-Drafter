@@ -103,6 +103,21 @@ That means:
 - no AWS dependency
 - data stays in the local environment
 
+## Environment Variables
+Backend configuration is loaded from `backend/.env`.
+
+Typical variables include:
+
+- `PORT`
+- `NODE_ENV`
+- `DATABASE_PATH`
+- `EMBEDDING_PROVIDER`
+- `EMBEDDING_MODEL`
+- `HF_API_KEY`
+- `HF_EMBEDDING_MODEL`
+- `GEMINI_API_KEY`
+- `GEMINI_MODEL`
+
 ## Getting Started
 
 ### Frontend
