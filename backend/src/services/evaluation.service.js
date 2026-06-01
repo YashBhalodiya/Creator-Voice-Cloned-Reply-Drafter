@@ -35,6 +35,20 @@ class EvaluationService {
     }
     return evaluationRepository.findByCreatorId(creatorId);
   }
+
+  /**
+   * Lists all evaluations.
+   */
+  async listAllEvaluations() {
+    return evaluationRepository.findAll();
+  }
+
+  /**
+   * Clears all evaluations.
+   */
+  async clearAllEvaluations() {
+    return evaluationRepository.clearAll();
+  }
 }
 
 export const evaluationService = new EvaluationService();

@@ -16,5 +16,7 @@ const evaluationSchema = {
 };
 
 router.post('/', validateBody(evaluationSchema), evaluationController.create);
+router.get('/', evaluationController.list);
+router.delete('/', evaluationController.clear);
 
 export default router;

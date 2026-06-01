@@ -22,6 +22,15 @@ class QuestionService {
     }
     return question;
   }
+
+  async getQuestionsByCreator(creatorId) {
+    // Validate creator exists
+    const creator = creatorRepository.findById(creatorId);
+    if (!creator) {
+      throw new NotFoundError(`Creator with ID ${creatorId} not found.`);
+    }
+    return questionRepository.findByCreatorId(creatorId);
+  }
 }
 
 export const questionService = new QuestionService();

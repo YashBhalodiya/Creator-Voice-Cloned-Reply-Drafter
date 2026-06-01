@@ -10,5 +10,6 @@ const questionSchema = {
 };
 
 router.post('/', validateBody(questionSchema), questionController.create);
+router.get('/:creatorId', questionController.listByCreator);
 
 export default router;
